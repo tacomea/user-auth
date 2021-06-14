@@ -44,10 +44,10 @@ import (
 
 var (
 	schema			= "%s:%s@tcp(mysql:3306)/%s?charset=utf8&parseTime=True&loc=Local"
-	username			= os.Getenv("MYSQL_USER")
-	password			= os.Getenv("MYSQL_PASSWORD")
-	userDbName			= os.Getenv("MYSQL_DATABASE")
-	dataSourceName		= fmt.Sprintf(schema, username, password, userDbName)
+	username		= os.Getenv("MYSQL_USER")
+	password		= os.Getenv("MYSQL_PASSWORD")
+	userDbName		= os.Getenv("MYSQL_DATABASE")
+	dataSourceName	= fmt.Sprintf(schema, username, password, userDbName)
 )
 
 func connect() *gorm.DB {
@@ -79,6 +79,7 @@ func main() {
 	delivery.RegisterHandler(uu, su)
 	delivery.LoginHandler(uu, su)
 	delivery.LogoutHandler(uu, su)
+	delivery.EnterHandler(uu, su)
 	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		log.Fatalln("Error in ListenAndServe()", err)

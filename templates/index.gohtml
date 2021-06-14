@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="utf-8">
     <title>Document</title>
@@ -8,25 +8,17 @@
 {{if .}}
 <p>{{.}}</p>
 {{end}}
-<h1>Account Creation</h1>
-<form action="/register" method="post">
-    <label>user name</label>
-    <input type="email" name="email" />
-    <label>password</label>
-    <input type="password" name="password"/>
-    <input type="submit" />
-</form>
-<h1>Login</h1>
+<h1>ログイン</h1>
 <form action="/login" method="post">
-    <label>user name</label>
+    <label>Eメール</label>
     <input type="email" name="email" />
-    <label>password</label>
+    <label>パスワード</label>
     <input type="password" name="password"/>
     <input type="submit" />
 </form>
-<h1>Logout</h1>
 <form action="/logout" method="POST">
     <input type="submit" value="logout">
 </form>
+<a href="/enter">新規作成</a>
 </body>
 </html>

@@ -32,12 +32,9 @@ func (h *indexHandler) Index(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		sessionId, err := token.ParseToken(cookie.Value)
 		if err != nil {
-			msg = "cookie modified"
-		} else {
-			session, err := h.sessionUseCase.Load(sessionId)
-			if err == nil {
-				msg = "from cookie, email: " + session.Email
-			}
+			log.Println("cookie modified")
+		} else if session, err := h.sessionUseCase.Load(sessionId); err == nil{
+			msg = "Your Email: " + session.Email
 		}
 	}
 
