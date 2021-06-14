@@ -1,7 +1,7 @@
 package domain
 
 type User struct {
-	Email    string `json:"email"`
+	Email    string `json:"email" gorm:"primaryKey"`
 	Password []byte `json:"password"` // Off course, HASHED
 }
 
@@ -18,7 +18,7 @@ type UserRepository interface {
 }
 
 type Session struct {
-	ID    string `json:"id"`
+	ID    string `json:"id" gorm:"primaryKey"`
 	Email string `json:"email"`
 }
 

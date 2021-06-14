@@ -1,9 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"os"
 	"userCreation/delivery"
+	"userCreation/domain"
 	"userCreation/repository"
 	"userCreation/usecase"
 )
@@ -37,10 +42,37 @@ import (
 //	//log.Fatalln(c.Listen(":80"))
 //}
 
+var (
+	schema			= "%s:%s@tcp(mysql:3306)/%s?charset=utf8&parseTime=True&loc=Local"
+	username			= os.Getenv("MYSQL_USER")
+	password			= os.Getenv("MYSQL_PASSWORD")
+	userDbName			= os.Getenv("MYSQL_DATABASE")
+	dataSourceName		= fmt.Sprintf(schema, username, password, userDbName)
+)
+
+func connect() *gorm.DB {
+	connection, err := gorm.Open(mysql.Open(dataSourceName), &gorm.Config{})
+	if err != nil {
+		log.Panic("Could not connect to the database")
+	}
+
+	connection.AutoMigrate(&domain.User{})
+	connection.AutoMigrate(&domain.Session{})
+
+	return connection
+}
+
 func main() {
-	ur := repository.NewSyncMapUserRepository()
+	// MySQL
+	db := connect()
+	ur := repository.NewUserRepositoryMySQL(db)
+	sr := repository.NewSessionRepositoryMySQL(db)
+
+	// sync.Map
+	//ur := repository.NewSyncMapUserRepository()
+	//sr := repository.NewSyncMapSessionRepository()
+
 	uu := usecase.NewUserUsecase(ur)
-	sr := repository.NewSyncMapSessionRepository()
 	su := usecase.NewSessionUsecase(sr)
 
 	delivery.IndexHandler(uu, su)

@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"encoding/base64"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -31,7 +32,10 @@ func (h *loginHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	user, err := h.userUseCase.Check(email)
+
+	encodedEmail := base64.StdEncoding.EncodeToString([]byte(email))
+
+	user, err := h.userUseCase.Check(encodedEmail)
 	if err != nil {
 		query := url.QueryEscape("username doesn't exist")
 		http.Redirect(w, r, "/?msg="+query, http.StatusSeeOther)

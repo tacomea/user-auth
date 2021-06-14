@@ -35,8 +35,8 @@ func (h *indexHandler) Index(w http.ResponseWriter, r *http.Request) {
 			msg = "cookie modified"
 		} else {
 			session, err := h.sessionUseCase.Load(sessionId)
-			if err != nil {
-				msg = "from cookie, username: " + session.Email
+			if err == nil {
+				msg = "from cookie, email: " + session.Email
 			}
 		}
 	}

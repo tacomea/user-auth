@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"encoding/base64"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
@@ -34,8 +35,10 @@ func (h *registerHandler) Register(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error while hashing", err)
 	}
+
+	encodedEmail := base64.StdEncoding.EncodeToString([]byte(email))
 	err = h.userUseCase.Create(domain.User{
-		Email:    email,
+		Email:    encodedEmail,
 		Password: encodedPassword,
 	})
 
